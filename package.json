@@ -10,10 +10,7 @@
         "lint": "eslint . --cache --ext .ts,.js",
         "format": "prettier --write 'src/**/*.ts'"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/dhino12/TelegramBot-AutoForward.git"
-    },
+  
     "keywords": [
         "boilerplate",
         "telegram-bot",
@@ -23,10 +20,6 @@
     ],
     "author": "dhino12",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/dhino12/TelegramBot-AutoForward/issues"
-    },
-    "homepage": "https://github.com/dhino12/TelegramBot-AutoForward#readme",
     "dependencies": {
         "@grammyjs/conversations": "^1.1.1",
         "express": "^4.18.2",
