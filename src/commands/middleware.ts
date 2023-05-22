@@ -336,9 +336,9 @@ async function observeClientChat(context: MyContext) {
       console.log("masuk for dalam FROM " + from + " to " + to);
       //   await ctx.forwardMessage(to , from)
       client.addEventHandler(async (event) => {
-        console.log('====================================');
-        console.log('====================================');
-        console.log("🚀isPrivate:", event.isPrivate)
+        // console.log('====================================');
+        // console.log('====================================');
+        // console.log("🚀isPrivate:", event.isPrivate)
         const message = event.message;
 
         if (message.senderId != undefined) {
@@ -357,9 +357,9 @@ async function observeClientChat(context: MyContext) {
             await client.forwardMessages(to, {
               messages: message,
               fromPeer: "",
-              dropAuthor: true,
-              noforwards: true,
             })
+            // dropAuthor: true,
+            // noforwards: true,
           } catch (error: any) {
             console.log(error);
 
