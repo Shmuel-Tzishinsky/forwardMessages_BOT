@@ -5,7 +5,10 @@ const callback_query = async (ctx: MyContext): Promise<void> => {
     const callbackData = ctx.callbackQuery?.data;
     switch (callbackData) {
         case "firstconnection":
-            ctx.reply(textHelp.firstConnection);
+            await ctx.reply(textHelp.firstConnection,     {
+                parse_mode: "Markdown",
+                disable_web_page_preview: true
+              });
             break;
         default:
             break;

@@ -8,7 +8,6 @@ const msg = async (ctx: MyContext): Promise<void> => {
     if (ctx.chat == undefined) throw { code: 404, message: "chatType not found" }
     if (ctx.from == undefined) throw { code: 404, message: "chat id not found" }
     if (ctx.message == undefined) throw { code: 404, message: "chatMessage not found" }
-    console.log('masuk');
     
     const resultWorker = loadWorkers(ctx.from.id)[0];
     switch (ctx.chat.type) {
@@ -27,7 +26,7 @@ const msg = async (ctx: MyContext): Promise<void> => {
         }
         break;
       case "group":
-        console.log("grup: " + ctx.message.text);
+        console.log("group: " + ctx.message.text);
         if (resultWorker == undefined) return;
 
         for (const from of resultWorker.from) {

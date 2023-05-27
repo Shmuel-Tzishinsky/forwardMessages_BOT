@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-
+import "./core/db/index"
 import commands from "./commands";
 import { bot } from "./core/bot";
 import { development, production } from "./utils/launch";

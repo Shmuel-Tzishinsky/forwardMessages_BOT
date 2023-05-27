@@ -18,7 +18,7 @@ const forward = async (ctx: MyContext): Promise<void> => {
     }
     const argCommand = ctx.match?.toString().toLowerCase().replace(/\s+/g, " ").trim();
     if (argCommand == undefined || ctx.from == undefined) {
-        await ctx.reply("command not found");
+        await ctx.reply("פקודה לא נמצאה!");
         return;
     }
 
@@ -42,7 +42,7 @@ const forward = async (ctx: MyContext): Promise<void> => {
         }
 
         if (checkWorker(argLabel, ctx.from.id)) {
-            await ctx.reply("Worker sudah tersedia");
+            await ctx.reply("המשימות זמינות");
             return 
         }
 
@@ -57,11 +57,11 @@ const forward = async (ctx: MyContext): Promise<void> => {
         });
 
         if (result) {
-            ctx.reply(`Worker Berhasil di simpan`);
+            ctx.reply(`עובדים זמינים`);
             return
         }
         else {
-            ctx.reply(`Mohon maaf terjadi kesalahan, pastikan sesuai dengan format`);
+            ctx.reply(`מצטער הייתה שגיאה, ודא שהיא מתאימה לפורמט`);
             return
         }
     } catch (error) {

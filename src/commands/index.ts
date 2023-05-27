@@ -1,7 +1,6 @@
 import { Composer } from "grammy";
 
 require("./middleware");
-import hello from "./handler/hello";
 import start from "./handler/start";
 import { MyContext } from "src/core/bot";
 import callback_query from "./handler/callback_query";
@@ -17,18 +16,19 @@ import msg from "./handler/msg";
 const composer = new Composer<MyContext>();
 
 composer.use(createConversation(login))
-composer.use(createConversation(logout))
+// composer.use(createConversation(logout))
 composer.use(createConversation(getGroup))
 composer.use(createConversation(getChannel))
 composer.use(createConversation(getUser))
 
-composer.command("hello", hello);
 composer.command("start", start);
 composer.command("connect", connect);
-composer.command("getchanel", getchanel);
+composer.command("forward", forward);
 composer.command("getuser", getuser);
 composer.command("getgroup", getgroup);
-composer.command("forward", forward);
+composer.command("getchanel", getchanel);
+composer.command("logout", logout);
+// composer.command("context", forward);
 
 composer.on("msg", msg)
 composer.on("callback_query:data", callback_query);

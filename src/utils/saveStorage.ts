@@ -44,7 +44,7 @@ class SaveStorage {
 
             const isDuplicate = sessions.find((session) => session.id == userAttrib.id);
             if (isDuplicate && fileName != "forwardWorker") {
-                throw "ID is registerd";
+                throw "ID is registered";
             }
 
             sessions.push(userAttrib);

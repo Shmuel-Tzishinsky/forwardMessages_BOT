@@ -1,33 +1,31 @@
 /* eslint-disable prettier/prettier */
-import { SaveStorage } from "../../utils/saveStorage";
+import { getSingleSession } from "../../controllers/sessionController";
 import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions";
 
 const connectAsUser = async (idFromUser: number): Promise<TelegramClient> => {
   let session = "";
 
-  const filePath = SaveStorage.checkSessionExist("session");
-  const result = SaveStorage.loadSession(filePath);
-  const IdDetected = result.filter(({ id }) => id == idFromUser)[0];
+  const IdDetected = await getSingleSession( idFromUser)
 
   return new Promise((resolve, reject) => {
     if (IdDetected == undefined) {
       return reject({
         code: 404,
         message:
-          "Session is empty, please registerd \n /connect <phone_number>",
+          "לא נמצא חיבור קודם ריק, נא להירשם \n\n /connect <phone number>",
       });
     }
 
     if (IdDetected) {
       session = IdDetected.session;
     }
-    console.log("idDetec: " + session);
+    console.log("session: " + session);
 
     const client = new TelegramClient(
       new StringSession(session),
-      parseInt(`${process.env.APPID}`),
-      `${process.env.APPHASH}`,
+      parseInt(`${process.env.APP_ID}`),
+      `${process.env.APP_HASH}`,
       {
         connectionRetries: 5,
       }
@@ -41,8 +39,8 @@ const logoutAsUser = async(): Promise<TelegramClient> => {
   return new Promise((resolve, reject) => {
     const client = new TelegramClient(
       new StringSession(""),
-      parseInt(`${process.env.APPID}`),
-      `${process.env.APPHASH}`,
+      parseInt(`${process.env.APP_ID}`),
+      `${process.env.APP_HASH}`,
       {
         connectionRetries: 5,
       }

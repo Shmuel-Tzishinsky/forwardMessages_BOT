@@ -2,7 +2,7 @@
 import { MyContext } from "../../core/bot";
 
 const getuser = async (ctx: MyContext): Promise<void> => {
-    await ctx.reply("🚫 Please wait a moment, don't send anything");
+    await ctx.reply("🚫 אנא המתן רגע, אל תשלח דבר");
     await ctx.conversation.enter("getUser");
 };
 

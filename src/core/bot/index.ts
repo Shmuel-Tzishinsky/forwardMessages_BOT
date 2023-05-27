@@ -9,24 +9,26 @@ const bot = new Bot<MyContext>(String(process.env.BOT_TOKEN));
 bot.use(
     session({
         type: "multi",
-        conversation: {}, // bisa dibiarkan kosong
+        conversation: {}, // Can be left blank
     }),
 );
 bot.use(conversations());
 
 bot.init()
     .then((client) => {
-        console.log(`Berhasil masuk sebagai ${bot.botInfo.username} - ${bot.botInfo.id}`);
+        console.log(`Connected successfully ${bot.botInfo.username} - ${bot.botInfo.id}`);
     })
     .catch((err) => console.error(err));
 
 bot.api.setMyCommands([
-    { command: "start", description: "Mulai bot ini" },
-    { command: "connect", description: "setup account" },
-    { command: "forward", description: "setup auto forward" },
-    { command: "getuser", description: "Get User ID" },
-    { command: "getgroup", description: "Get Group ID" },
-    { command: "getchanel", description: "Get Channel ID" },
+    { command: "connect", description: "✨ פתח/הפעל את החשבון" },
+    { command: "forward", description: "⏩ הגדר העברה אוטומטית" },
+    { command: "getuser", description: "🔗 קבל את המזהה של המשתמשים שלך" },
+    { command: "getgroup", description:  "🔗 קבל את המזהה של הקבוצות שלך" },
+    { command: "getchanel", description: "🔗 קבל את המזהה של הערוצים שלך" },
+    { command: "logout", description: "👋 נתק את החשבון" },
 ]);
 
 export { bot, MyContext, MyConversation };
+
+
