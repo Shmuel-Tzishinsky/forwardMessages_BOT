@@ -84,7 +84,7 @@ async function login(conversation: MyConversation, context: MyContext) {
     job.start() 
 
       await context.reply("אתה מחובר 👌");
-      await observeClientChat(context);
+      // await observeClientChat(context);
       return;
     }
 
