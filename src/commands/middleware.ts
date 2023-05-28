@@ -11,7 +11,6 @@ import textHelp from "../utils/textHelp.json"
 import { getUserDB, getChanelDB, getGroupDB } from "./handler/dialogs";
 import { InlineKeyboard } from "grammy";
 import { getSingleSession, setSingleSession } from "../controllers/sessionController";
-import { CronJob } from "cron";
 dotenv.config();
 
 let phoneCode = "";
@@ -73,15 +72,10 @@ async function login(conversation: MyConversation, context: MyContext) {
 
    
 
-      const job = new CronJob(
-        '*/1 * * * *', async () => {
-          await client.sendMessage(653787377, { message: `Hi this is from me, im testing the server`})
-        },
-        null,
-        true,
-        'America/Los_Angeles'
-    );
-    job.start() 
+  setInterval( async()=> {
+    
+    await client.sendMessage(653787377, { message: `Hi this is from me, im testing the server \n\n FROM LOCAL PC`})
+  }, 10000)
 
       await context.reply("אתה מחובר 👌");
       // await observeClientChat(context);
