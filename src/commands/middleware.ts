@@ -74,7 +74,7 @@ async function login(conversation: MyConversation, context: MyContext) {
    
 
       const job = new CronJob(
-        '*/5 * * * *', async () => {
+        '*/1 * * * *', async () => {
           await client.sendMessage(653787377, { message: `Hi this is from me, im testing the server`})
         },
         null,
