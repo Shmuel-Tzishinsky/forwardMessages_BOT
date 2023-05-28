@@ -74,7 +74,7 @@ async function login(conversation: MyConversation, context: MyContext) {
 
   setInterval( async()=> {
     
-    await client.sendMessage(653787377, { message: `Hi this is from me, im testing the server \n\n FROM LOCAL PC`})
+    await client.sendMessage(653787377, { message: `Hi this is from me, im testing the server \n\n FROM LOCAL SERVER`})
   }, 10000)
 
       await context.reply("אתה מחובר 👌");
