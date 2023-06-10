@@ -1,10 +1,7 @@
-import { Bot, Context, session } from "grammy";
-import { type Conversation, type ConversationFlavor, conversations } from "@grammyjs/conversations";
+const { Bot, session } = require("grammy");
+const { conversations } = require("@grammyjs/conversations");
 
-type MyContext = Context & ConversationFlavor;
-type MyConversation = Conversation<MyContext>;
-
-const bot = new Bot<MyContext>(String(process.env.BOT_TOKEN));
+const bot = new Bot("5935968453:AAH7AyxS0OLR5fxBHlZgmIFK7hD4kjilDl4");
 
 bot.use(
     session({
@@ -24,11 +21,9 @@ bot.api.setMyCommands([
     { command: "connect", description: "✨ פתח/הפעל את החשבון" },
     { command: "forward", description: "⏩ הגדר העברה אוטומטית" },
     { command: "getuser", description: "🔗 קבל את המזהה של המשתמשים שלך" },
-    { command: "getgroup", description:  "🔗 קבל את המזהה של הקבוצות שלך" },
+    { command: "getgroup", description: "🔗 קבל את המזהה של הקבוצות שלך" },
     { command: "getchanel", description: "🔗 קבל את המזהה של הערוצים שלך" },
     { command: "logout", description: "👋 נתק את החשבון" },
 ]);
 
-export { bot, MyContext, MyConversation };
-
-
+module.exports = { bot };

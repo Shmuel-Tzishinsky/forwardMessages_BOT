@@ -1,8 +1,7 @@
-import { Bot, webhookCallback } from "grammy";
-import { MyContext } from "../core/bot";
-import express from "express";
+const { webhookCallback } = require("grammy");
+const express = require("express");
 
-const production = async (bot: Bot<MyContext>): Promise<void> => {
+const production = async (bot) => {
     try {
         const app = express();
         app.use(express.json());
@@ -18,7 +17,7 @@ const production = async (bot: Bot<MyContext>): Promise<void> => {
     }
 };
 
-const development = async (bot: Bot<MyContext>): Promise<void> => {
+const development = async (bot) => {
     try {
         await bot.api.deleteWebhook();
         console.log("[SERVER] Bot starting polling");
@@ -28,4 +27,4 @@ const development = async (bot: Bot<MyContext>): Promise<void> => {
     }
 };
 
-export { production, development };
+module.exports = { production, development };

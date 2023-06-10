@@ -1,4 +1,4 @@
-import ForwardWorker from "../core/db/models/forwardWorker"
+const ForwardWorker = require("../core/db/models/forwardWorker")
 
 
 const getAndEditUser = async (query, newData) => {
@@ -9,7 +9,7 @@ const getAndEditUser = async (query, newData) => {
         });
 
         return user;
-    } catch (err:any) {
+    } catch (err) {
         throw Error(err);
     }
 };
@@ -18,9 +18,9 @@ const getSingleUserService = async (query) => {
     try {
         const user = await ForwardWorker.findOne(query);
         return user;
-    } catch (err:any) {
+    } catch (err) {
         throw Error(err);
     }
 };
 
-export { getSingleUserService, getAndEditUser };
+module.exports =  { getSingleUserService, getAndEditUser };

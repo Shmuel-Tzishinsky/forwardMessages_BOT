@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import fs from "fs";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
 class SaveStorage {
-    static checkSessionExist(fileName: string) {
+    static checkFileSessionExist(fileName) {
         const dirPath = path.resolve(__dirname, "../data");
         const filePath = `${dirPath}/${fileName}.json`;
 
@@ -21,15 +21,36 @@ class SaveStorage {
         return filePath;
     }
 
-    static loadSession(filePath: string) {
+    static loadSession(filePath) {
         const fileSession = fs.readFileSync(`${filePath}`, "utf-8");
         const sessions = JSON.parse(fileSession);
-
-        // console.log(sessions);
         return sessions;
     }
 
-    static set(userAttrib: any, fileName: string) {
+    /**
+     *
+     * @param id obtained from the user (belongs to the user)
+     */
+    checkSession(id) {
+        if (id == undefined) return [];
+
+        const filePath = SaveStorage.checkFileSessionExist("session");
+        const result = SaveStorage.loadSession(filePath);
+        if (id == undefined) {
+            throw { code: 404, message: "ERROR ID undefined" };
+        }
+
+        const IdDetected = result.filter((item) => item.id == id);
+
+        if (IdDetected != undefined) {
+            return IdDetected;
+        } else {
+            return [];
+        }
+        return [];
+    }
+
+    set(userAttrib, fileName) {
         /**
          * TODO
          * SET Session to session.json
@@ -39,12 +60,12 @@ class SaveStorage {
         }
 
         if (userAttrib instanceof Object) {
-            const checkFileExist = this.checkSessionExist(fileName);
+            const checkFileExist = this.checkFileSessionExist(fileName);
             const sessions = this.loadSession(checkFileExist);
 
             const isDuplicate = sessions.find((session) => session.id == userAttrib.id);
             if (isDuplicate && fileName != "forwardWorker") {
-                throw "ID is registered";
+                throw "ID is registerd";
             }
 
             sessions.push(userAttrib);
@@ -57,9 +78,9 @@ class SaveStorage {
         return false;
     }
 
-    static updateDialogs(id: number, fileName: string, dialogs: any) {
+    updateDialogs(id, fileName, dialogs) {
         return new Promise((resolve, reject) => {
-            const filePath = this.checkSessionExist(fileName);
+            const filePath = this.checkFileSessionExist(fileName);
             let sessionsData = this.loadSession(filePath);
             const sessionTmp = sessionsData.find((session) => session.id == id);
             sessionsData = sessionsData.filter((session) => session.id != id);
@@ -88,8 +109,8 @@ class SaveStorage {
         });
     }
 
-    static rm(id: number, fileName: string) {
-        const checkFileExist = this.checkSessionExist(fileName);
+    rm(id, fileName) {
+        const checkFileExist = this.checkFileSessionExist(fileName);
         const sessions = this.loadSession(checkFileExist);
 
         const removeSession = sessions.filter((session) => session.id != id);
@@ -100,4 +121,4 @@ class SaveStorage {
         return true;
     }
 }
-export { SaveStorage };
+module.exports = { SaveStorage };

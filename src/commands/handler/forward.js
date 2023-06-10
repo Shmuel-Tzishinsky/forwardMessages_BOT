@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { checkWorker, resultSplitId, saveToStorage } from "../../utils/forwardWorker";
-import { MyContext } from "../../core/bot";
-import * as textHelp from "../../utils/textHelp.json";
-import validator from "validator"
+const { checkWorker, resultSplitId, saveToStorage } = require("../../utils/forwardWorker");
+const textHelp = require("../../utils/textHelp.json");
+const validator = require("validator");
 
 /**
  * setup forward from -> to [SAVE TO JSON]
- * @param ctx MyContext from converstation core\bot\index.ts
- * @returns Promise<void> 
+ * @param ctx  from converstation core\bot\index.ts
+ * @returns Promise<void>
  */
-const forward = async (ctx: MyContext): Promise<void> => { 
+const forward = async (ctx) => {
     if (ctx.chat?.type != "private") {
         await ctx.reply(textHelp.pleasePrivateChat + ` [${ctx.me.username}](tg://user?id=${ctx.me.id})`, {
             parse_mode: "Markdown",
@@ -28,12 +27,12 @@ const forward = async (ctx: MyContext): Promise<void> => {
     try {
         if (argCommand == "") {
             await ctx.reply(textHelp.forward);
-            return 
+            return;
         }
 
         if (!argAction.includes("add")) {
             await ctx.reply(textHelp.addNotInclude);
-            return
+            return;
         }
 
         if (validator.isNumeric(argLabel)) {
@@ -43,7 +42,7 @@ const forward = async (ctx: MyContext): Promise<void> => {
 
         if (checkWorker(argLabel, ctx.from.id)) {
             await ctx.reply("המשימות זמינות");
-            return 
+            return;
         }
 
         const { froms, toMany } = resultSplitId(argAction, argLabel, argCommand);
@@ -58,15 +57,14 @@ const forward = async (ctx: MyContext): Promise<void> => {
 
         if (result) {
             ctx.reply(`עובדים זמינים`);
-            return
-        }
-        else {
+            return;
+        } else {
             ctx.reply(`מצטער הייתה שגיאה, ודא שהיא מתאימה לפורמט`);
-            return
+            return;
         }
     } catch (error) {
         console.log(error);
     }
 };
 
-export default forward;
+module.exports = forward;

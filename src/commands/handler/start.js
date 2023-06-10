@@ -1,8 +1,7 @@
-import { MyContext } from "../../core/bot";
-import { InlineKeyboard } from "grammy";
-import * as textHelp from "../../utils/textHelp.json";
+const { InlineKeyboard } = require("grammy");
+const textHelp = require("../../utils/textHelp.json");
 
-const start = async (ctx: MyContext): Promise<void> => {
+const start = async (ctx) => {
     const inlineKeyboard = new InlineKeyboard();
     inlineKeyboard.text("פתיחת חשבון 🔂", "firstconnection").row();
 
@@ -16,4 +15,4 @@ const start = async (ctx: MyContext): Promise<void> => {
     }
 };
 
-export default start;
+module.exports = start;

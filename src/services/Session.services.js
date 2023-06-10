@@ -1,4 +1,4 @@
-import Session from "../core/db/models/session"
+const Session = require("../core/db/models/session");
 
 const getAndEditSession = async (query, newData) => {
     try {
@@ -8,7 +8,7 @@ const getAndEditSession = async (query, newData) => {
         });
 
         return session;
-    } catch (err:any) {
+    } catch (err) {
         throw Error(err);
     }
 };
@@ -17,9 +17,9 @@ const getSingleSessionService = async (query) => {
     try {
         const session = await Session.findOne(query);
         return session;
-    } catch (err:any) {
+    } catch (err) {
         throw Error(err);
     }
 };
 
-export { getSingleSessionService, getAndEditSession };
+module.exports = { getSingleSessionService, getAndEditSession };

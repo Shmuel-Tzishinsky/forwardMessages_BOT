@@ -2,13 +2,13 @@
     "name": "grammy-vercel-boilerplate",
     "version": "1.0.0",
     "description": "Grammy boilerplate to develop and host telegram bots on Vercel",
-    "main": "dist/boy.js",
+    "main": "dist/bot.js",
     "scripts": {
         "build": "tsc",
         "start": "node dist/index.js",
-        "dev": "nodemon --exec npx ts-node ./src/index.ts",
+        "dev": "nodemon index.js",
         "lint": "eslint . --cache --ext .ts,.js",
-        "format": "prettier --write 'src/**/*.ts'"
+        "format": "prettier --write '/**/*.ts'"
     },
     "keywords": [
         "boilerplate",
@@ -28,6 +28,7 @@
         "grammy": "^1.6.1",
         "mongoose": "^7.2.0",
         "telegram": "^2.16.4",
+        "translate-google": "^1.5.0",
         "validator": "^13.9.0"
     },
     "devDependencies": {
