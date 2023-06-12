@@ -358,11 +358,7 @@ async function observeClientChat(context) {
             console.log("enter for in FROM " + from + " to " + to);
             //   await ctx.forwardMessage(to , from)
             client.addEventHandler(async (event) => {
-                // console.log('====================================');
-                // console.log('====================================');
-                // console.log("🚀isPrivate:", event.isPrivate)
                 const message = event.message;
-
                 if (message.senderId != undefined) {
                     try {
                         const getMev2 = await client.getEntity(message.senderId);
@@ -374,10 +370,23 @@ async function observeClientChat(context) {
                         // console.log("getMev2: ", getMev2);
                         // const getCha= await message.getSender();
                         // console.log("🚀 ~ file: middleware.ts:354 ~ client.addEventHandler ~ getChat:", getChat)
-                        if (message.message.length) {
-                            const translateText = await translate(message.message, { to: "iw" });
+
+                        const translateText = message.message?.length ? await translate(message.message, { to: "iw" }) : "";
+                        if (message?.media?.photo || message?.media?.document?.mimeType === "video/mp4") {
+                            const buffer = await client.downloadMedia(message?.media?.photo || message?.media?.document);
+                            buffer.name = `file.${message?.media?.photo ? "png" : "mp4"}`;
+                            await client.sendFile(to, {
+                                file: buffer,
+                                caption: `קישור להודעה: <a href="https://t.me/c/${from}/${message.id}">${
+                                    getMev2["title"] || getMev2["firstName"]
+                                }</a>\n\n ${translateText}`,
+                                parseMode: "html",
+                            });
+                        } else if (message.message.length) {
                             await client.sendMessage(to, {
-                                message: `From: <a href="https://t.me/c/${from}">${getMev2["title"] || getMev2["firstName"]}</a>\n\n ${translateText}`,
+                                message: `קישור להודעה: <a href="https://t.me/c/${from}/${message.id}">${
+                                    getMev2["title"] || getMev2["firstName"]
+                                }</a>\n\n ${translateText}`,
                                 parseMode: "html",
                             });
                         }
