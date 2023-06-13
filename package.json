@@ -14,12 +14,12 @@
   "license": "MIT",
   "dependencies": {
     "@grammyjs/conversations": "^1.1.2",
-    "@nestjs/mongoose": "^9.2.2",
     "cron": "^2.3.1",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "grammy": "^1.6.1",
-    "mongoose": "^6.4.0",
+    "mongoose": "^7.2.4",
+    "nodemon": "^2.0.22",
     "telegram": "^2.16.4",
     "translate-google": "^1.5.0"
   }
