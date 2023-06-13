@@ -1,5 +1,4 @@
 {
-  "name": "forward bot",
   "version": "1.0.0",
   "description": "Grammy boilerplate to develop and host telegram bots",
   "main": "index.js",
