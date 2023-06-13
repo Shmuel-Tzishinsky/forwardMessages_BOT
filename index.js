@@ -2,6 +2,7 @@ require("./src/core/db/index");
 const commands = require("./src/commands");
 const { bot } = require("./src/core/bot");
 const { development } = require("./src/utils/launch");
+require("dotenv").config();
 //production
 const express = require("express");
 const app = express();
@@ -17,7 +18,4 @@ app.listen(port, () => {
 
 bot.use(commands);
 
-// process.env.NODE_ENV === "development" ?
-development(bot);
-
-// : production(bot);
+process.env.NODE_ENV === "development" ? development(bot) : production(bot);

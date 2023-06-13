@@ -20,7 +20,7 @@ const connectAsUser = async (idFromUser) => {
         }
         console.log("session: " + session);
 
-        const client = new TelegramClient(new StringSession(session), 24246000, `fb5a11dcfcd3c03498ae5b37a3a6fa33`, {
+        const client = new TelegramClient(new StringSession(session), parseInt(process.env.APP_ID), process.env.APP_HASH, {
             connectionRetries: 5,
         });
 
@@ -30,7 +30,7 @@ const connectAsUser = async (idFromUser) => {
 
 const logoutAsUser = async () => {
     return new Promise((resolve, reject) => {
-        const client = new TelegramClient(new StringSession(""), 24246000, `fb5a11dcfcd3c03498ae5b37a3a6fa33`, {
+        const client = new TelegramClient(new StringSession(""), parseInt(process.env.APP_ID), process.env.APP_HASH, {
             connectionRetries: 5,
         });
 

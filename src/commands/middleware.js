@@ -7,9 +7,10 @@ const { NewMessage } = require("telegram/events");
 const { getSingleSession, setSingleSession, deleteSessionAction } = require("../controllers/sessionController");
 const translate = require("translate-google");
 const { InlineKeyboard } = require("grammy");
-
+require("dotenv").config();
 let phoneCode = "";
-let client = new TelegramClient(new StringSession(""), 24246000, "fb5a11dcfcd3c03498ae5b37a3a6fa33", {
+
+let client = new TelegramClient(new StringSession(""), parseInt(process.env.APP_ID), process.env.APP_HASH, {
     connectionRetries: 5,
 });
 
@@ -99,8 +100,8 @@ async function login(conversation, context) {
         }
         const auth = await client.sendCode(
             {
-                apiHash: "fb5a11dcfcd3c03498ae5b37a3a6fa33",
-                apiId: 24246000,
+                apiHash: process.env.APP_HASH,
+                apiId: parseInt(process.env.APP_ID),
             },
             `${phoneNumber}`,
         );
