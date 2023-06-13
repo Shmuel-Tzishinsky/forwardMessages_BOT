@@ -2,13 +2,10 @@
   "name": "forward bot",
   "version": "1.0.0",
   "description": "Grammy boilerplate to develop and host telegram bots",
-  "main": "dist/bot.js",
+  "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon index.js",
-    "lint": "eslint . --cache --ext .ts,.js",
-    "format": "prettier --write '/**/*.ts'"
+    "start": "nodemon index.js",
+    "dev": "nodemon index.js"
   },
   "author": "Shmuel",
   "license": "MIT",
