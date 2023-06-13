@@ -1,7 +1,7 @@
 const { Bot, session } = require("grammy");
 const { conversations } = require("@grammyjs/conversations");
 
-const bot = new Bot("5935968453:AAH7AyxS0OLR5fxBHlZgmIFK7hD4kjilDl4");
+const bot = new Bot("5935968453:AAFjB0rHZ5WhLERxraukxDCi2Q6epCgMFdQ");
 
 bot.use(
     session({

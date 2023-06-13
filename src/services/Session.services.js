@@ -22,4 +22,14 @@ const getSingleSessionService = async (query) => {
     }
 };
 
-module.exports = { getSingleSessionService, getAndEditSession };
+const deleteSessionService = async (query) => {
+    try {
+        const session = await Session.deleteOne(query).exec();
+        if (session.deletedCount) return true;
+        else return false;
+    } catch (err) {
+        throw Error(err);
+    }
+};
+
+module.exports = { getSingleSessionService, deleteSessionService, getAndEditSession };

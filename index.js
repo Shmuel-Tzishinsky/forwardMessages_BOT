@@ -1,10 +1,8 @@
-const dotenv = require("dotenv");
-dotenv.config();
 require("./src/core/db/index");
 const commands = require("./src/commands");
 const { bot } = require("./src/core/bot");
-const { development, production } = require("./src/utils/launch");
-
+const { development } = require("./src/utils/launch");
+//production
 const express = require("express");
 const app = express();
 const port = 3000;

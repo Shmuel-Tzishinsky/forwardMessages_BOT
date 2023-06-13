@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 const { checkWorker, resultSplitId, saveToStorage } = require("../../utils/forwardWorker");
 const textHelp = require("../../utils/textHelp.json");
-const validator = require("validator");
 
 /**
  * setup forward from -> to [SAVE TO JSON]
@@ -35,7 +34,7 @@ const forward = async (ctx) => {
             return;
         }
 
-        if (validator.isNumeric(argLabel)) {
+        if ( /^\d+$/.test(argLabel)) {
             await ctx.reply(textHelp.forwardLabelNotInclude);
             return;
         }

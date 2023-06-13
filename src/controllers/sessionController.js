@@ -1,6 +1,6 @@
 const Session = require("../core/db/models/session");
 
-const { getSingleSessionService, getAndEditSession } = require("../services/Session.services");
+const { getSingleSessionService, getAndEditSession, deleteSessionService } = require("../services/Session.services");
 
 const setSingleSession = async (userAttrib) => {
     try {
@@ -36,10 +36,10 @@ const getSingleSession = async (id) => {
 };
 
 const deleteSessionAction = async (id) => {
+    console.log("🚀 ~ file: sessionController.js:39 ~ deleteSessionAction ~ id:", id);
     try {
-        const session = await getSingleSessionService({ id: id });
-        // await session.remove();
-        return true;
+        const session = await deleteSessionService({ id: id });
+        return session;
     } catch (err) {
         return err.message;
     }

@@ -1,24 +1,22 @@
-const { bot } = require("../core/bot");
 const { Api, TelegramClient } = require("telegram");
 const { StringSession } = require("telegram/sessions");
-const dotenv = require("dotenv");
 const { SaveStorage } = require("../utils/saveStorage");
 const { connectAsUser } = require("./handler/connectAsUser");
-const validator = require("validator");
 const { loadWorkers } = require("../utils/forwardWorker");
 const { NewMessage } = require("telegram/events");
-const textHelp = require("../utils/textHelp.json");
-const { getUserDB, getChanelDB, getGroupDB } = require("./handler/dialogs");
-const { InlineKeyboard } = require("grammy");
-const { getSingleSession, setSingleSession } = require("../controllers/sessionController");
+const { getSingleSession, setSingleSession, deleteSessionAction } = require("../controllers/sessionController");
 const translate = require("translate-google");
-
-dotenv.config();
+const { InlineKeyboard } = require("grammy");
 
 let phoneCode = "";
 let client = new TelegramClient(new StringSession(""), 24246000, "fb5a11dcfcd3c03498ae5b37a3a6fa33", {
     connectionRetries: 5,
 });
+
+function isAsOnlyNumbers(p) {
+    const digits = p.replace(/\D/g, "");
+    return /^\d+$/.test(digits);
+}
 
 async function askPhoneCode(conversation, context) {
     try {
@@ -47,8 +45,18 @@ async function askPhoneCode(conversation, context) {
     }
 }
 
+const checkAuthorized = async () => {
+    try {
+        await await client.invoke(new Api.updates.GetState());
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
 async function login(conversation, context) {
     // const loadPhone = await context.reply("אנא המתן לעיבוד המספר...");
+    await context.reply("אנא המתן לעיבוד המספר...");
     // const messageId = loadPhone.message_id;
     // const chatId = loadPhone.chat.id;
 
@@ -66,8 +74,13 @@ async function login(conversation, context) {
         }
         console.log("Loading interactive example...");
         await client.connect();
+        // const authorized = await client.isUserAuthorized();
+        // console.log("🚀 ~ file: middleware.js:69 ~ login ~ authorized:", authorized);
 
-        if ((await client.isUserAuthorized()) && IdDetected != undefined) {
+        let authorized = await checkAuthorized();
+        console.log("🚀 ~ file: middleware.js:72 ~ login ~ authorized:", authorized);
+
+        if (authorized && IdDetected != undefined) {
             // await bot.api.deleteMessage(chatId, messageId);
 
             await context.reply("אתה מחובר 👌");
@@ -76,7 +89,7 @@ async function login(conversation, context) {
         }
 
         const phoneNumber = context.match;
-        if (validator.isEmpty(`${phoneNumber}`) || !validator.isMobilePhone(`${phoneNumber}`)) {
+        if (!phoneNumber.length || !isAsOnlyNumbers(phoneNumber)) {
             // await bot.api.deleteMessage(chatId, messageId);
 
             throw {
@@ -143,15 +156,19 @@ async function logout(context) {
                 message: "מצטער לא הושלם!, מזהה ריק",
             };
         }
-        const result = SaveStorage.rm(context.from.id, "session");
-        client.invoke(new Api.auth.LogOut());
-        if (result) {
+        let authorized = await checkAuthorized();
+        console.log("🚀 ~ file: middleware.js:160 ~ logout ~ authorized:", authorized);
+        if (authorized) await client.invoke(new Api.auth.LogOut());
+
+        const result = await deleteSessionAction(context.from.id);
+        if (result || authorized) {
             context.reply("ההפעלה נמחקה בהצלחה");
         } else {
             context.reply("אופס נראה שעדיין לא התחברת");
         }
     } catch (error) {
-        console.error(error);
+        console.log(error);
+        context.reply(error?.message);
     }
 
     return;
@@ -178,7 +195,7 @@ async function getGroup(conversation, context) {
         // }
 
         // create newDialogs in session.js
-        const dialog = await client.getDialogs();
+        const dialogs = await client.getDialogs();
         const groups = [];
         let ind = 0;
         const dialogsData = dialogs.map((dialog) => {
@@ -234,7 +251,7 @@ async function getChannel(conversation, context) {
         // }
 
         const channels = [];
-        const dialog = await client.getDialogs();
+        const dialogs = await client.getDialogs();
         let ind = 0;
         const dialogsData = dialogs.map((dialog) => {
             if (dialog.isChannel && !dialog.isGroup) {
@@ -291,7 +308,7 @@ async function getUser(conversation, context) {
         // }
 
         const users = [];
-        const dialog = await client.getDialogs();
+        const dialogs = await client.getDialogs();
         let ind = 0;
         const dialogsData = dialogs.map((dialog) => {
             if (dialog.isChannel == false && dialog.isGroup == false && dialog.isUser === true) {
@@ -370,7 +387,10 @@ async function observeClientChat(context) {
                         // console.log("getMev2: ", getMev2);
                         // const getCha= await message.getSender();
                         // console.log("🚀 ~ file: middleware.ts:354 ~ client.addEventHandler ~ getChat:", getChat)
-
+                        console.log("====================================");
+                        console.log(message.message?.length);
+                        console.log(message.message);
+                        console.log("====================================");
                         const translateText = message.message?.length ? await translate(message.message, { to: "iw" }) : "";
                         if (message?.media?.photo || message?.media?.document?.mimeType === "video/mp4") {
                             const buffer = await client.downloadMedia(message?.media?.photo || message?.media?.document);
