@@ -5,7 +5,7 @@ const db = mongoose.connection;
 
 // MONGOOSE DB
 mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@autoforwardbot.g1i40fv.mongodb.net/?retryWrites=true&w=majority`,
+  `mongodb+srv://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0.g63hosm.mongodb.net/`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,

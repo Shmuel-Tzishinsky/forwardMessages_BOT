@@ -9,7 +9,6 @@ const {
   setSingleSession,
   deleteSessionAction,
 } = require("../controllers/sessionController");
-const translate = require("translate-google");
 const { InlineKeyboard, InputFile } = require("grammy");
 const { bot } = require("../core/bot");
 require("dotenv").config();
@@ -63,23 +62,24 @@ const checkAuthorized = async () => {
   }
 };
 
-async function login(conversation, context) {
+async function login(context) {
+  let conversation = {};
   // const loadPhone = await context.reply("אנא המתן לעיבוד המספר...");
-  await context.reply("אנא המתן לעיבוד המספר...");
+  await bot.api.sendMessage(6331273759, "אנא המתן לעיבוד המספר...");
   // const messageId = loadPhone.message_id;
   // const chatId = loadPhone.chat.id;
 
   try {
-    if (context.from == undefined) {
-      throw {
-        code: 404,
-        message: "שגיאה, מזהה לא מוגדר",
-      };
-    }
-    const IdDetected = await getSingleSession(context.from?.id);
+    // if (context.from == undefined) {
+    //   throw {
+    //     code: 404,
+    //     message: "שגיאה, מזהה לא מוגדר",
+    //   };
+    // }
+    const IdDetected = await getSingleSession(6331273759);
     if (IdDetected != undefined) {
       await client.disconnect();
-      client = await connectAsUser(context.from?.id);
+      client = await connectAsUser(6331273759);
     }
     console.log("Loading interactive example...");
     await client.connect();
@@ -92,7 +92,7 @@ async function login(conversation, context) {
     if (authorized && IdDetected != undefined) {
       // await bot.api.deleteMessage(chatId, messageId);
 
-      await context.reply("אתה מחובר 👌");
+      await bot.api.sendMessage(6331273759, "אתה מחובר 👌");
       await observeClientChat(context);
       return;
     }
@@ -377,11 +377,11 @@ async function getUser(conversation, context) {
 }
 
 async function observeClientChat(context) {
-  if (context.from == undefined) {
-    return;
-  }
+  // if (context.from == undefined) {
+  //   return;
+  // }
 
-  const resultWorker = loadWorkers(context.from.id)[0];
+  const resultWorker = loadWorkers(6331273759)[0];
   if (resultWorker == undefined) return;
 
   for (const from of resultWorker.from) {
@@ -405,33 +405,68 @@ async function observeClientChat(context) {
             // console.log(message.message?.length);
             // console.log(message.message);
             // console.log("====================================");
-            const translateText = message.message?.length
-              ? await translate(message.message, { to: "iw" })
-              : message.message;
 
-            const theMessage = `קישור להודעה: <a href="https://t.me/c/${from}/${message.id}">${
-              getMev2["title"] || getMev2["firstName"]
-            }</a>\n\n ${translateText}`;
-
+            const theMessage = `קישור להודעה: <a href="https://t.me/c/${from.replace("-100", "")}/${
+              message.id
+            }">${getMev2["title"] || getMev2["firstName"]}</a>\n\n ${message.message}`;
+            // console.log("====================================");
+            // console.log(
+            //   message.media?.photo.sizes[message.media?.photo?.sizes?.length - 1] || message?.media?.document
+            // );
+            // console.log("====================================");
             if (message?.media?.photo || message?.media?.document?.mimeType === "video/mp4") {
               const buffer = await client.downloadMedia(message?.media?.photo || message?.media?.document);
               buffer.name = `file.${message?.media?.photo ? "png" : "mp4"}`;
 
               if (message?.media?.photo) {
-                await bot.api.sendPhoto(to, new InputFile(buffer), {
-                  caption: theMessage,
-                  parse_mode: "HTML",
-                });
+                let linkWhatsappChannel =
+                  "*עדכונים ומבזקים*: https://chat.whatsapp.com/EbSaOoGgEnqDOnzBs2HJ2m";
+                await sendMediaWhatsapp(
+                  {
+                    mimetype: "image/jpeg",
+                    data: buffer.toString("base64"),
+                    filename: "image.jpg",
+                  },
+                  {
+                    caption: `${message.message}\n\n*מקור: ${
+                      getMev2["title"] || getMev2["firstName"]
+                    }*\n\n${linkWhatsappChannel}`,
+                  }
+                );
+                // await bot.api.sendPhoto(to, new InputFile(buffer), {
+                //   caption: theMessage,
+                //   parse_mode: "HTML",
+                // });
               } else {
-                await bot.api.sendVideo(to, new InputFile(buffer), {
-                  caption: theMessage,
-                  parse_mode: "HTML",
-                });
+                let linkWhatsappChannel =
+                  "*עדכונים ומבזקים*: https://chat.whatsapp.com/EbSaOoGgEnqDOnzBs2HJ2m";
+                await sendMediaWhatsapp(
+                  {
+                    mimetype: "video/mp4",
+                    data: buffer.toString("base64"),
+                    filename: "Media",
+                  },
+                  {
+                    caption: `${message.message}\n\n*מקור: ${
+                      getMev2["title"] || getMev2["firstName"]
+                    }*\n\n${linkWhatsappChannel}`,
+                  }
+                );
+                // await bot.api.sendVideo(to, new InputFile(buffer), {
+                //   caption: theMessage,
+                //   parse_mode: "HTML",
+                // });
               }
             } else if (message.message.length) {
-              await bot.api.sendMessage(to, theMessage, {
-                parse_mode: "HTML",
-              });
+              let linkWhatsappChannel = "*עדכונים ומבזקים*: https://chat.whatsapp.com/EbSaOoGgEnqDOnzBs2HJ2m";
+              await sendMessage(
+                `${message.message}\n\n*מקור: ${
+                  getMev2["title"] || getMev2["firstName"]
+                }*\n\n${linkWhatsappChannel}`
+              );
+              // await bot.api.sendM essage(to, theMessage, {
+              //   parse_mode: "HTML",
+              // });
             }
             // await client.forwardMessages(to, {
             //   messages: message,
@@ -459,7 +494,7 @@ async function observeClientChat(context) {
   }
 }
 
-const splitEndSendDialogData = async (contex, textArray) => {
+const splitEndSendDialogData = async (context, textArray) => {
   const splitAtRow = textArray.filter((n) => n).slice("\n");
   const chunkSize = 50;
   for (let i = 0; i < splitAtRow.length; i += chunkSize) {
@@ -494,3 +529,5 @@ module.exports = {
   getGroup,
   observeClientChat,
 };
+
+const { sendMessage, sendMediaWhatsapp } = require("../utils/whatsapp");

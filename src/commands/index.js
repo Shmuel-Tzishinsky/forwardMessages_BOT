@@ -21,7 +21,7 @@ composer.use(createConversation(getChannel));
 composer.use(createConversation(getUser));
 
 composer.command("start", start);
-composer.command("connect", connect);
+composer.command("connect", login);
 composer.command("forward", forward);
 composer.command("getuser", getuser);
 composer.command("getgroup", getgroup);
